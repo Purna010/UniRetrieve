@@ -65,14 +65,6 @@ The platform combines:
 5. Secure verification ensures only the rightful owner can claim the item.
 6. Campus administrators can analyze geospatial data for security insights.
 
----
-
-## 🏗️ System Architecture
-
-- MERN / Next.js based scalable architecture  
-- Cloud-hosted backend services  
-- Secure authentication & database encryption  
-- Modular AI inference pipeline  
 
 ---
 
@@ -88,7 +80,7 @@ The platform combines:
 ## 👨‍💻 Project Type
 
 Final Year Major Project  
-Full-Stack AI-Integrated SaaS System  
+Full-Stack Integrated System  
 
 ---
 
