@@ -67,30 +67,6 @@ The platform combines:
 
 ---
 
-## 🛠️ Tech Stack
-
-### Frontend
-- React.js / Next.js  
-- Tailwind CSS  
-- Mapbox / Google Maps API  
-
-### Backend
-- Node.js  
-- Express.js  
-- MongoDB  
-
-### AI / ML
-- CNN / YOLO for object detection  
-- Image similarity matching  
-- Recommendation engine  
-
-### Cloud & Deployment
-- Scalable Cloud Infrastructure  
-- REST APIs  
-- Real-time synchronization  
-
----
-
 ## 🏗️ System Architecture
 
 - MERN / Next.js based scalable architecture  
