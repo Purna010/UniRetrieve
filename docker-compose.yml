@@ -1,0 +1,43 @@
+services:
+  # 1. MongoDB Database Container
+  mongodb:
+    image: mongo:7.0
+    container_name: uniretrieve_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=uniretrieve
+
+  # 2. Python YOLOv5 Vision AI Microservice
+  cv-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.cv
+    container_name: uniretrieve_cv
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+
+  # 3. Node.js Express API & Realtime Socket Gateway
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: uniretrieve_backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongodb:27017/uniretrieve
+      - CV_SERVICE_URL=http://cv-service:5001/predict
+    depends_on:
+      - mongodb
+      - cv-service
+
+volumes:
+  mongo_data:
+    driver: local

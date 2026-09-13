@@ -65,7 +65,6 @@ The platform combines:
 5. Secure verification ensures only the rightful owner can claim the item.
 6. Campus administrators can analyze geospatial data for security insights.
 
-
 ---
 
 ## 🚀 Expected Impact
