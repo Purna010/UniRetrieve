@@ -19,8 +19,8 @@
     @apply bg-dark-base text-white font-sans antialiased;
     background-color: theme('colors.dark-base');
     background-image: 
-      radial-gradient(ellipse at 20% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(0, 245, 255, 0.04) 0%, transparent 60%);
+      radial-gradient(ellipse at 20% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(251, 191, 36, 0.04) 0%, transparent 60%);
     min-height: 100vh;
   }
 
@@ -43,8 +43,8 @@
   }
 
   ::selection {
-    background: rgba(0, 245, 255, 0.2);
-    color: #00f5ff;
+    background: rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
   }
 }
 
@@ -64,7 +64,7 @@
 
   .glass-input {
     @apply w-full border border-white/10 rounded-xl px-4 py-3 placeholder-white/30 
-           focus:outline-none focus:border-neon-cyan/50 focus:bg-white/10
+           focus:outline-none focus:border-amber-500/60 focus:bg-white/10
            transition-all duration-300 backdrop-blur-md;
     background: rgba(255, 255, 255, 0.05);
     color: inherit;
@@ -75,29 +75,32 @@
     background: rgba(30, 41, 59, 0.7); /* Slate 800 highly translucent */
   }
 
-  /* Neon borders */
-  .border-neon-cyan { border-color: rgba(0, 245, 255, 0.5); }
-  .border-neon-blue { border-color: rgba(0, 128, 255, 0.5); }
-  .border-neon-purple { border-color: rgba(168, 85, 247, 0.5); }
-  .border-neon-pink { border-color: rgba(255, 0, 110, 0.5); }
-  .border-neon-green { border-color: rgba(0, 255, 136, 0.5); }
-  .border-neon-orange { border-color: rgba(255, 136, 0, 0.5); }
-  .border-neon-yellow { border-color: rgba(255, 220, 0, 0.5); }
+  /* Amber & Neon borders */
+  .border-neon-amber { border-color: rgba(245, 158, 11, 0.5); }
+  .border-neon-cyan { border-color: rgba(245, 158, 11, 0.5); }
+  .border-neon-blue { border-color: rgba(251, 191, 36, 0.5); }
+  .border-neon-purple { border-color: rgba(245, 158, 11, 0.5); }
+  .border-neon-pink { border-color: rgba(217, 119, 6, 0.5); }
+  .border-neon-green { border-color: rgba(245, 158, 11, 0.5); }
+  .border-neon-orange { border-color: rgba(217, 119, 6, 0.5); }
+  .border-neon-yellow { border-color: rgba(251, 191, 36, 0.5); }
   .border-neon-red { border-color: rgba(255, 60, 60, 0.5); }
 
-  /* Neon glow text */
-  .text-glow-cyan { text-shadow: 0 0 20px rgba(0, 245, 255, 0.6); }
-  .text-glow-purple { text-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
-  .text-glow-pink { text-shadow: 0 0 20px rgba(255, 0, 110, 0.6); }
-  .text-glow-green { text-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
+  /* Amber glow text */
+  .text-glow-amber { text-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
+  .text-glow-cyan { text-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
+  .text-glow-purple { text-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+  .text-glow-pink { text-shadow: 0 0 20px rgba(217, 119, 6, 0.5); }
+  .text-glow-green { text-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
 
   /* Box glows */
-  .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 255, 0.15), inset 0 0 20px rgba(0, 245, 255, 0.03); }
-  .glow-blue { box-shadow: 0 0 20px rgba(0, 128, 255, 0.15), inset 0 0 20px rgba(0, 128, 255, 0.03); }
-  .glow-purple { box-shadow: 0 0 20px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.03); }
-  .glow-pink { box-shadow: 0 0 20px rgba(255, 0, 110, 0.15), inset 0 0 20px rgba(255, 0, 110, 0.03); }
-  .glow-green { box-shadow: 0 0 20px rgba(0, 255, 136, 0.15), inset 0 0 20px rgba(0, 255, 136, 0.03); }
-  .glow-orange { box-shadow: 0 0 20px rgba(255, 136, 0, 0.15), inset 0 0 20px rgba(255, 136, 0, 0.03); }
+  .glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.03); }
+  .glow-cyan { box-shadow: 0 0 20px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.03); }
+  .glow-blue { box-shadow: 0 0 20px rgba(251, 191, 36, 0.2), inset 0 0 20px rgba(251, 191, 36, 0.03); }
+  .glow-purple { box-shadow: 0 0 20px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.03); }
+  .glow-pink { box-shadow: 0 0 20px rgba(217, 119, 6, 0.2), inset 0 0 20px rgba(217, 119, 6, 0.03); }
+  .glow-green { box-shadow: 0 0 20px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.03); }
+  .glow-orange { box-shadow: 0 0 20px rgba(217, 119, 6, 0.2), inset 0 0 20px rgba(217, 119, 6, 0.03); }
 
   /* Shimmer skeleton */
   .skeleton {
@@ -123,37 +126,38 @@
   /* Input fields */
   .input-neon {
     @apply w-full bg-dark-card border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 
-           focus:outline-none focus:border-neon-cyan/50 focus:ring-1 focus:ring-neon-cyan/30
+           focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30
            transition-all duration-300;
   }
 
-  /* Status chips */
+  /* Status chips - Dual-Color Theme (Amber Gold & Pure White) */
   .status-lost {
     @apply text-xs font-semibold px-2.5 py-1 rounded-full;
-    background: rgba(255, 60, 60, 0.15);
-    color: #ff6b6b;
-    border: 1px solid rgba(255, 60, 60, 0.3);
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.35);
   }
 
   .status-found {
     @apply text-xs font-semibold px-2.5 py-1 rounded-full;
-    background: rgba(0, 255, 136, 0.15);
-    color: #00ff88;
-    border: 1px solid rgba(0, 255, 136, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
   }
 
   .status-matched {
     @apply text-xs font-semibold px-2.5 py-1 rounded-full;
-    background: rgba(0, 245, 255, 0.15);
-    color: #00f5ff;
-    border: 1px solid rgba(0, 245, 255, 0.3);
+    background: rgba(245, 158, 11, 0.22);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.55);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
   }
 
   .status-claimed {
     @apply text-xs font-semibold px-2.5 py-1 rounded-full;
-    background: rgba(168, 85, 247, 0.15);
-    color: #a855f7;
-    border: 1px solid rgba(168, 85, 247, 0.3);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   /* Leaflet overrides */

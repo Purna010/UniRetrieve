@@ -5,16 +5,16 @@ export default function SuccessOverlay({ isVisible, message, onClose }) {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md p-6 animate-fade-in">
-      <div className="glass-panel border-neon-cyan/40 bg-dark-panel/90 max-w-sm w-full p-10 text-center relative overflow-hidden shadow-[0_0_50px_rgba(0,245,255,0.2)]">
+      <div className="glass-panel border-amber-500/40 bg-dark-panel/90 max-w-sm w-full p-10 text-center relative overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.25)]">
         {/* Background glowing circles */}
-        <div className="absolute -top-10 -left-10 w-32 h-32 bg-neon-cyan/20 blur-[50px] rounded-full" />
-        <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-neon-purple/20 blur-[50px] rounded-full" />
+        <div className="absolute -top-10 -left-10 w-32 h-32 bg-amber-500/20 blur-[50px] rounded-full" />
+        <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full" />
 
         {/* Animated Checkmark */}
         <div className="relative mb-6 flex justify-center">
-          <div className="w-20 h-20 rounded-full bg-neon-cyan/10 border-2 border-neon-cyan flex items-center justify-center relative">
+          <div className="w-20 h-20 rounded-full bg-amber-500/10 border-2 border-amber-500 flex items-center justify-center relative">
             <svg
-              className="w-10 h-10 text-neon-cyan"
+              className="w-10 h-10 text-amber-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -26,11 +26,11 @@ export default function SuccessOverlay({ isVisible, message, onClose }) {
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            <div className="absolute inset-0 rounded-full border-2 border-neon-cyan/30 animate-ping" style={{ animationDuration: '2s' }} />
+            <div className="absolute inset-0 rounded-full border-2 border-amber-500/30 animate-ping" style={{ animationDuration: '2s' }} />
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-2 text-glow-cyan">Success!</h2>
+        <h2 className="text-2xl font-bold text-white mb-2 text-glow-amber">Success!</h2>
         
         <p className="text-white/60 text-sm leading-relaxed mb-4">
           {message || "Your report has been submitted and registered successfully."}

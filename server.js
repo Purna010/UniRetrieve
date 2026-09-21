@@ -1021,7 +1021,7 @@ app.get('/api/health', async (req, res) => {
     cvOk = false;
   }
 
-  const emailOk = !!transporter;
+  const emailOk = !!notificationService;
   const pushOk = !!(vapidKeys && vapidKeys.publicKey);
 
   const overallStatus = (mongoOk && (blockchainOk || !blockchainContract)) ? 'healthy' : 'degraded';

@@ -4,6 +4,7 @@ import { AppProvider } from './context/AppContext';
 import PageLayout from './components/layout/PageLayout';
 
 import HomePage from './pages/HomePage';
+import BrowseItemsPage from './pages/BrowseItemsPage';
 import ReportItemPage from './pages/ReportItemPage';
 import MatchResultPage from './pages/MatchResultPage';
 import ChatPage from './pages/ChatPage';
@@ -29,6 +30,7 @@ function AppContent() {
     <Routes>
       <Route path="/" element={<PageLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="items" element={<BrowseItemsPage />} />
         <Route path="report" element={<ReportItemPage />} />
         <Route path="match/:matchId" element={<MatchResultPage />} />
         <Route path="chat" element={<ChatPage />} />

@@ -20,15 +20,13 @@ export function CategoryBadge({ category }) {
 export function TypeBadge({ type }) {
   if (type === 'lost') {
     return (
-      <span className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
-        style={{ background: 'rgba(255,60,60,0.15)', color: '#ff6b6b', border: '1px solid rgba(255,60,60,0.3)' }}>
+      <span className="text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/40">
         🔍 Lost
       </span>
     );
   }
   return (
-    <span className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
-      style={{ background: 'rgba(0,255,136,0.15)', color: '#00ff88', border: '1px solid rgba(0,255,136,0.3)' }}>
+    <span className="text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-white/10 text-white border border-white/30">
       📦 Found
     </span>
   );
@@ -36,14 +34,13 @@ export function TypeBadge({ type }) {
 
 export function OnlineBadge({ status }) {
   return (
-    <span className={`inline-block w-2 h-2 rounded-full ${status === 'online' ? 'bg-neon-green animate-pulse' : 'bg-gray-600'}`} />
+    <span className={`inline-block w-2 h-2 rounded-full ${status === 'online' ? 'bg-amber-400 animate-pulse shadow-[0_0_8px_#f59e0b]' : 'bg-gray-600'}`} />
   );
 }
 
 export function AIBadge() {
   return (
-    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-      style={{ background: 'rgba(168,85,247,0.15)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.3)' }}>
+    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
       ✦ AI Verified
     </span>
   );
@@ -51,8 +48,7 @@ export function AIBadge() {
 
 export function BlockchainBadge({ hash }) {
   return (
-    <span className="text-xs font-mono px-2 py-0.5 rounded-full flex items-center gap-1"
-      style={{ background: 'rgba(0,245,255,0.08)', color: '#00f5ff', border: '1px solid rgba(0,245,255,0.2)' }}>
+    <span className="text-xs font-mono px-2 py-0.5 rounded-full flex items-center gap-1 bg-white/5 text-white/80 border border-white/15">
       ⛓ {hash ? hash.slice(0, 12) + '...' : 'On-chain'}
     </span>
   );

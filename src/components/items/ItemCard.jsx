@@ -44,7 +44,7 @@ export default function ItemCard({ item, showMatch = false }) {
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2 }}
       className={`glass-card p-4 hover:border-white/20 
-        ${item.matchId ? 'cursor-pointer hover:shadow-[0_0_20px_rgba(0,245,255,0.15)]' : ''}`}
+        ${item.matchId ? 'cursor-pointer hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]' : ''}`}
       onClick={handleClick}
     >
       <ItemImageBox item={item} />
@@ -58,7 +58,7 @@ export default function ItemCard({ item, showMatch = false }) {
         <CategoryBadge category={item.category} />
 
         {item.ocrText && (
-          <div className="flex items-center gap-1.5 text-[10px] text-neon-cyan/80 bg-neon-cyan/5 border border-neon-cyan/15 px-2 py-0.5 rounded mt-1">
+          <div className="flex items-center gap-1.5 text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded mt-1">
             <span>📝</span>
             <span className="truncate" title={item.ocrText}>Detected: "{truncate(item.ocrText, 32)}"</span>
           </div>
@@ -95,8 +95,8 @@ export default function ItemCard({ item, showMatch = false }) {
         {item.status === 'matched' && item.matchId && (
           <button
             onClick={(e) => { e.stopPropagation(); navigate(`/match/${item.matchId}`); }}
-            className="w-full mt-2 py-2 rounded-lg text-xs font-semibold text-neon-cyan bg-neon-cyan/10 
-              border border-neon-cyan/30 hover:bg-neon-cyan/20 hover:border-neon-cyan/50 transition-all"
+            className="w-full mt-2 py-2 rounded-lg text-xs font-semibold text-amber-400 bg-amber-500/10 
+              border border-amber-500/30 hover:bg-amber-500/20 hover:border-amber-500/50 transition-all"
           >
             ✦ View Match Details
           </button>

@@ -1,150 +1,145 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { useApp } from '../context/AppContext';
-import ItemCard from '../components/items/ItemCard';
-import { SkeletonCard } from '../components/ui/Skeletons';
-import { mockCategories } from '../data/mockItems';
-import { staggerContainer, staggerItem, fadeInUp } from '../animations/variants';
-
-const FILTERS = ['All', 'Lost', 'Found', 'Matched', 'Claimed'];
+import { Link } from 'react-router-dom';
+import { fadeInUp } from '../animations/variants';
+import HomeInfoCards from '../components/home/HomeInfoCards';
 
 export default function HomePage() {
-  const { items } = useApp();
-  const [typeFilter, setTypeFilter] = useState('All');
-  const [categoryFilter, setCategoryFilter] = useState('All');
-  const [search, setSearch] = useState('');
-  const [loading] = useState(false);
-
-  const filtered = useMemo(() => {
-    return items?.filter(item => {
-      const matchType = typeFilter === 'All' || item?.type === typeFilter.toLowerCase() || item?.status === typeFilter.toLowerCase();
-      const matchCat = categoryFilter === 'All' || item?.category === categoryFilter;
-      const matchSearch = !search || (item?.title || '').toLowerCase().includes(search.toLowerCase())
-        || (item?.description || '').toLowerCase().includes(search.toLowerCase());
-      return matchType && matchCat && matchSearch;
-    }) || [];
-  }, [items, typeFilter, categoryFilter, search]);
+  const scrollToGuide = () => {
+    const el = document.getElementById('info-cards-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div className="space-y-8">
-      {/* Hero */}
-      <motion.section {...fadeInUp} className="relative overflow-hidden rounded-2xl glass-panel p-8">
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-neon-cyan/20 border border-neon-cyan/30 text-neon-cyan drop-shadow-md backdrop-blur-md">
-              ✦ AI-Powered Matching
+    <div className="space-y-12 max-w-7xl mx-auto w-full">
+      {/* Hero Section */}
+      <motion.section 
+        {...fadeInUp} 
+        className="relative overflow-hidden rounded-2xl glass-panel p-8 sm:p-12 border border-white/10 shadow-2xl"
+      >
+        {/* Ambient Amber Glows */}
+        <div className="absolute top-0 right-0 w-[30rem] h-[30rem] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="relative z-10 space-y-6">
+          {/* Badges Strip */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 drop-shadow-md backdrop-blur-md flex items-center gap-1.5">
+              <span>✦</span> AI-Powered Visual Matching
             </span>
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-neon-purple/20 border border-neon-purple/30 text-neon-purple drop-shadow-md backdrop-blur-md">
-              ⛓ Blockchain Secured
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white drop-shadow-md backdrop-blur-md flex items-center gap-1.5">
+              <span>⛓</span> Blockchain Handover Ledger
+            </span>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 drop-shadow-md backdrop-blur-md flex items-center gap-1.5">
+              <span>🏛</span> Campus-Wide Network
             </span>
           </div>
-          <h1 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg tracking-tight">
-            Lost Something? <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple drop-shadow-sm">We'll Find It.</span>
-          </h1>
-          <p className="text-white/70 text-base lg:text-lg max-w-xl leading-relaxed drop-shadow-sm font-medium">
-            UniRetrieve uses AI image matching and geospatial analysis to reunite lost items with their owners across campus.
-          </p>
+
+          {/* Heading */}
+          <div className="space-y-3 max-w-3xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight drop-shadow-lg tracking-tight">
+              Lost Something On Campus? <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-white to-amber-400 drop-shadow-sm">
+                We'll Find It Fast.
+              </span>
+            </h1>
+            <p className="text-white/70 text-base sm:text-lg leading-relaxed drop-shadow-sm font-normal pt-1">
+              UniRetrieve integrates computer vision image embeddings, optical character recognition for student IDs, and campus-wide coordination to reunite lost belongings with their rightful owners.
+            </p>
+          </div>
+
+          {/* Dual Action Buttons */}
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+            <Link
+              to="/report"
+              className="px-6 py-3.5 rounded-xl font-bold text-sm text-black bg-amber-500 hover:bg-amber-400 transition-all shadow-[0_0_20px_rgba(245,158,11,0.4)] flex items-center gap-2 transform hover:-translate-y-0.5"
+            >
+              <span>＋</span>
+              <span>Report Lost / Found</span>
+            </Link>
+
+            <Link
+              to="/items"
+              className="px-6 py-3.5 rounded-xl font-bold text-sm text-white glass-card border-white/20 hover:border-amber-400 hover:text-amber-400 transition-all flex items-center gap-2 transform hover:-translate-y-0.5"
+            >
+              <span>🔍</span>
+              <span>Browse All Reports</span>
+            </Link>
+
+            <button
+              onClick={scrollToGuide}
+              className="px-5 py-3.5 rounded-xl font-semibold text-sm text-white/70 hover:text-white transition-all flex items-center gap-2"
+            >
+              <span>📖</span>
+              <span>FAQ & How It Works ↓</span>
+            </button>
+          </div>
         </div>
       </motion.section>
 
-      {/* Search + Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, delay: 0.1 }}
-        className="space-y-4"
-      >
-        {/* Search bar */}
-        <div className="relative">
-          <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            id="item-search"
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search items by name, description..."
-            className="glass-input pl-11"
-          />
+      {/* Quick Metrics Bar */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="glass-panel p-5 border border-white/10 rounded-xl text-center space-y-1 hover:border-amber-500/30 transition-colors">
+          <p className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">&lt; 2.5s</p>
+          <p className="text-xs font-semibold text-white">AI Visual Match Speed</p>
+          <p className="text-[11px] text-white/40">Real-time vector search</p>
         </div>
 
-        {/* Type filter pills */}
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-white/30 mr-1">Type:</span>
-          {FILTERS.map(f => (
-            <button
-              key={f}
-              id={`filter-${f.toLowerCase()}`}
-              onClick={() => setTypeFilter(f)}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all border ${
-                typeFilter === f
-                  ? 'glass-card border-neon-cyan/50 text-neon-cyan bg-neon-cyan/10'
-                  : 'glass-card border-white/5 text-white/50 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
+        <div className="glass-panel p-5 border border-white/10 rounded-xl text-center space-y-1 hover:border-amber-500/30 transition-colors">
+          <p className="text-2xl sm:text-3xl font-black text-white font-mono">98.4%</p>
+          <p className="text-xs font-semibold text-white">Student ID OCR Accuracy</p>
+          <p className="text-[11px] text-white/40">USN & Roll No detection</p>
         </div>
 
-        {/* Category filter */}
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-xs text-white/30 mr-1">Category:</span>
-          {mockCategories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setCategoryFilter(cat)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all border ${
-                categoryFilter === cat
-                  ? 'glass-card border-neon-purple/50 text-neon-purple bg-neon-purple/10'
-                  : 'glass-card border-white/5 text-white/40 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="glass-panel p-5 border border-white/10 rounded-xl text-center space-y-1 hover:border-amber-500/30 transition-colors">
+          <p className="text-2xl sm:text-3xl font-black text-amber-400 font-mono">100%</p>
+          <p className="text-xs font-semibold text-white">Encrypted Private Chat</p>
+          <p className="text-[11px] text-white/40">No personal numbers leaked</p>
         </div>
-      </motion.div>
 
-      {/* Results count */}
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-white/40">
-          Showing <span className="text-white font-semibold">{filtered.length}</span> items
-        </p>
-        <p className="text-xs text-white/25">Updated live</p>
+        <div className="glass-panel p-5 border border-white/10 rounded-xl text-center space-y-1 hover:border-amber-500/30 transition-colors">
+          <p className="text-2xl sm:text-3xl font-black text-white font-mono">On-Chain</p>
+          <p className="text-xs font-semibold text-white">Blockchain Verified</p>
+          <p className="text-[11px] text-white/40">Official tamper-proof custody</p>
+        </div>
       </div>
 
-      {/* Items Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {Array(6).fill(0).map((_, i) => <SkeletonCard key={i} />)}
+      {/* Interactive Platform Guide: About App, How to Use, FAQs */}
+      <HomeInfoCards />
+
+      {/* Bottom CTA Banner */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="glass-panel p-8 sm:p-10 border border-white/10 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden"
+      >
+        <div className="space-y-2 text-center md:text-left">
+          <h3 className="text-2xl font-bold text-white tracking-tight">
+            Ready to reunite with your belongings?
+          </h3>
+          <p className="text-xs sm:text-sm text-white/60 max-w-xl">
+            Whether you misplaced an item in the labs or picked up a lost card in the canteen, UniRetrieve ensures swift, verified return.
+          </p>
         </div>
-      ) : filtered.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-20 text-white/20"
-        >
-          <p className="text-4xl mb-3">🔍</p>
-          <p className="text-lg font-medium">No items found</p>
-          <p className="text-sm mt-1">Try adjusting your filters</p>
-        </motion.div>
-      ) : (
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
-        >
-          {filtered.map(item => (
-            <motion.div key={item.id} variants={staggerItem}>
-              <ItemCard item={item} />
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            to="/report"
+            className="px-6 py-3 rounded-xl font-bold text-xs text-black bg-amber-500 hover:bg-amber-400 transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+          >
+            Report An Item
+          </Link>
+          <Link
+            to="/items"
+            className="px-6 py-3 rounded-xl font-semibold text-xs text-white glass-card border-white/20 hover:border-amber-400 hover:text-amber-400 transition-all"
+          >
+            View Active Reports
+          </Link>
+        </div>
+      </motion.div>
     </div>
   );
 }

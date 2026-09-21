@@ -29,10 +29,27 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-64px)] px-4">
+    <div className="min-h-screen bg-dark-base flex flex-col items-center justify-center relative overflow-hidden px-4 py-8">
+      {/* Campus Background Image with Dark Overlay */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none bg-cover bg-center bg-no-repeat"
+        style={{ 
+          backgroundImage: `url('/campus-bg.png')`,
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        <div className="absolute inset-0 bg-[#070b14]/80 backdrop-blur-[1px] bg-gradient-to-b from-[#0f172a]/90 via-[#070b14]/75 to-[#0b1120]/95" />
+      </div>
+
+      {/* Ambient background glows */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-neon-purple/10 blur-[120px]" />
+        <div className="absolute top-[40%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-neon-cyan/10 blur-[140px]" />
+      </div>
+
       <motion.div
         {...fadeInDown}
-        className="w-full max-w-md glass-panel p-8 space-y-8 flex flex-col items-center text-center relative overflow-hidden"
+        className="w-full max-w-md glass-panel p-8 space-y-8 flex flex-col items-center text-center relative z-10 overflow-hidden"
       >
         {/* Glow decoration */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1/2 bg-neon-cyan/20 blur-[80px] pointer-events-none" />

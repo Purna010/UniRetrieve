@@ -19,7 +19,7 @@ export default function MyItemsPage() {
       </motion.div>
 
       <div className="space-y-6">
-        <h2 className="text-lg font-semibold text-neon-cyan border-b border-neon-cyan/20 pb-2">Active Reports</h2>
+        <h2 className="text-lg font-semibold text-amber-400 border-b border-amber-500/20 pb-2">Active Reports</h2>
         {activeItems.length === 0 ? (
           <p className="text-sm text-white/30 italic">No active reports.</p>
         ) : (

@@ -7,7 +7,8 @@ import { fadeInDown } from '../../animations/variants';
 import SystemStatusBadge from '../common/SystemStatusBadge';
 
 const navLinks = [
-  { to: '/', label: 'Browse Items', icon: '◈' },
+  { to: '/', label: 'Home', icon: '◈' },
+  { to: '/items', label: 'All Items', icon: '🔍' },
   { to: '/report', label: 'Report Item', icon: '＋' },
   { to: '/my-items', label: 'My Items', icon: '◉' },
   { to: '/chat', label: 'Messages', icon: '✉' },
@@ -28,21 +29,21 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full">
-      {/* Gradient bar top */}
-      <div className="h-0.5 w-full bg-gradient-to-r from-neon-purple via-neon-cyan to-neon-pink relative z-50" />
+      {/* Dual Color Gradient bar top */}
+      <div className="h-0.5 w-full bg-gradient-to-r from-amber-500 via-white to-amber-500 relative z-50 shadow-[0_0_12px_rgba(245,158,11,0.5)]" />
 
-      <nav className="glass-panel rounded-none border-t-0 border-x-0 border-b z-40 relative">
+      <nav className="glass-panel rounded-none border-t-0 border-x-0 border-b border-white/10 z-40 relative backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <NavLink to="/" className="flex items-center gap-3 group">
-              <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-neon-cyan/20 to-neon-purple/20 border border-neon-cyan/30 flex items-center justify-center group-hover:border-neon-cyan/60 transition-all">
-                <span className="text-neon-cyan font-bold text-lg" style={{ fontFamily: 'JetBrains Mono, monospace' }}>U</span>
-                <div className="absolute inset-0 rounded-xl bg-neon-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/40 flex items-center justify-center group-hover:border-amber-400 transition-all shadow-[0_0_12px_rgba(245,158,11,0.25)]">
+                <span className="text-amber-400 font-bold text-lg" style={{ fontFamily: 'JetBrains Mono, monospace' }}>U</span>
+                <div className="absolute inset-0 rounded-xl bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               <div>
                 <span className="font-bold text-white text-lg tracking-tight">Uni</span>
-                <span className="font-bold text-neon-cyan text-lg tracking-tight text-glow-cyan">Retrieve</span>
+                <span className="font-bold text-amber-400 text-lg tracking-tight text-glow-amber">Retrieve</span>
               </div>
             </NavLink>
 
@@ -61,8 +62,8 @@ export default function Navbar() {
                     className={({ isActive }) =>
                       `flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
                       ${isActive
-                        ? 'text-neon-cyan bg-neon-cyan/10 border border-neon-cyan/20'
-                        : 'text-white/50 hover:text-white hover:bg-white/5'
+                        ? 'text-amber-400 bg-amber-500/10 border border-amber-500/30 font-semibold'
+                        : 'text-white/60 hover:text-white hover:bg-white/5'
                       }`
                     }
                   >
@@ -88,7 +89,7 @@ export default function Navbar() {
                       d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-neon-pink rounded-full text-xs flex items-center justify-center font-bold animate-pulse-ring">
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-black rounded-full text-xs flex items-center justify-center font-bold">
                       {unreadCount}
                     </span>
                   )}
@@ -98,11 +99,11 @@ export default function Navbar() {
                   {notifOpen && (
                     <motion.div
                       {...fadeInDown}
-                      className="absolute right-0 top-12 w-80 glass-panel shadow-2xl overflow-hidden z-50"
+                      className="absolute right-0 top-12 w-80 glass-panel shadow-2xl overflow-hidden z-50 border border-white/10"
                     >
-                      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
+                      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
                         <span className="text-sm font-semibold text-white">Notifications</span>
-                        <button onClick={markAllRead} className="text-xs text-neon-cyan hover:text-neon-cyan/80 transition-colors">
+                        <button onClick={markAllRead} className="text-xs text-amber-400 hover:text-amber-300 transition-colors font-medium">
                           Mark all read
                         </button>
                       </div>

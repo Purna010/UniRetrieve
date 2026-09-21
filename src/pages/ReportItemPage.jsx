@@ -187,19 +187,17 @@ export default function ReportItemPage() {
         <p className="text-sm text-white/40">Fill in the details below to report a lost or found item on campus.</p>
       </motion.div>
 
-      {}
+      {/* Type selector */}
       <motion.div variants={staggerItem} className="flex gap-4">
         {ITEM_TYPES.map(t => (
           <button
             key={t}
             id={`type-${t.toLowerCase()}`}
             onClick={() => set('type', t.toLowerCase())}
-            className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all border backdrop-blur-md ${
+            className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all border backdrop-blur-md ${
               form.type === t.toLowerCase()
-                ? t === 'Lost'
-                  ? 'bg-red-500/15 border-red-500/40 text-red-400 drop-shadow-md shadow-[0_0_15px_rgba(239,68,68,0.2)]'
-                  : 'bg-neon-green/15 border-neon-green/40 text-neon-green drop-shadow-md shadow-[0_0_15px_rgba(0,255,170,0.2)]'
-                : 'bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:bg-white/10 hover:text-white'
+                ? 'bg-amber-500/15 border-amber-500 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.3)]'
+                : 'bg-white/5 border-white/10 text-white/50 hover:border-white/20 hover:bg-white/10 hover:text-white'
             }`}
           >
             {t === 'Lost' ? '🔍 I Lost Something' : '📦 I Found Something'}
@@ -207,20 +205,23 @@ export default function ReportItemPage() {
         ))}
       </motion.div>
 
-      {}
+      {/* Main Form */}
       <motion.form
         onSubmit={handleSubmit}
         variants={staggerItem}
         className="glass-panel border-white/10 p-5 space-y-6 bg-dark-panel/40 relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-neon-cyan/5 blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {}
+          {/* Left Column: Details + Description */}
           <div className="flex flex-col gap-6">
-            {}
-            <div className="glass-card border-neon-blue/30 p-5 space-y-4 bg-neon-blue/5">
-              <p className="text-sm font-semibold text-neon-blue/90">Basic Details</p>
+            {/* 1. Basic Details */}
+            <div className="glass-card border-amber-500/25 p-5 space-y-4 bg-amber-500/5">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-bold text-white">Basic Details</p>
+                <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 uppercase tracking-wider">Required</span>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2 space-y-1">
                   <label className="text-xs font-semibold text-white/50 uppercase tracking-wider" htmlFor="item-title">Item Title</label>
@@ -230,7 +231,7 @@ export default function ReportItemPage() {
                     placeholder="What was lost/found? e.g., Blue Hydroflask"
                     value={form.title}
                     onChange={e => set('title', e.target.value)}
-                    className={`glass-input relative z-10 w-full transition-all py-2 ${errors.title ? 'border-red-500 bg-red-500/5' : 'focus:border-neon-blue/50 focus:bg-white/10'}`}
+                    className={`glass-input relative z-10 w-full transition-all py-2 ${errors.title ? 'border-red-500 bg-red-500/5' : 'focus:border-amber-500/60 focus:bg-white/10'}`}
                   />
                   {errors.title && <p className="mt-1 text-xs text-red-400">{errors.title}</p>}
                 </div>
@@ -238,7 +239,7 @@ export default function ReportItemPage() {
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-white/50 uppercase tracking-wider flex items-center justify-between" htmlFor="item-category">
                     Category
-                    <span className="w-1.5 h-1.5 rounded-full bg-neon-blue animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                   </label>
                   <select
                     id="item-category"
@@ -268,38 +269,39 @@ export default function ReportItemPage() {
               </div>
             </div>
 
-            {}
-            <div className="glass-card border-neon-purple/30 p-5 space-y-4 bg-neon-purple/5 flex-grow flex flex-col">
-              <p className="text-sm font-semibold text-neon-purple/90">Description</p>
+            {/* 2. Description */}
+            <div className="glass-card border-white/10 p-5 space-y-4 bg-white/5 flex-grow flex flex-col">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-bold text-white">Description</p>
+                <span className="text-[10px] font-mono text-white/40 bg-white/5 px-2 py-0.5 rounded border border-white/10 uppercase tracking-wider">Details</span>
+              </div>
               <div className="space-y-1 flex-grow flex flex-col">
                 <textarea
                   id="item-description"
                   value={form.description}
                   onChange={e => set('description', e.target.value)}
                   placeholder="Provide a detailed description of the item, noting any unique features, serial numbers, or identifying marks..."
-                  className={`glass-input resize-none py-2 w-full flex-grow hover:bg-white/5 transition-colors ${errors.description ? 'border-red-500 bg-red-500/5' : 'focus:border-neon-purple/50 focus:bg-white/10'}`}
+                  className={`glass-input resize-none py-2 w-full flex-grow hover:bg-white/5 transition-colors ${errors.description ? 'border-red-500 bg-red-500/5' : 'focus:border-amber-500/60 focus:bg-white/10'}`}
                 />
                 {errors.description && <p className="text-xs text-red-400">{errors.description}</p>}
               </div>
             </div>
           </div>
 
-          {}
+          {/* Right Column: Media + Location */}
           <div className="flex flex-col gap-6">
-            {}
-            <div className="glass-card border-neon-orange/30 p-5 space-y-4 bg-neon-orange/5 group hover:border-neon-orange/50 transition-colors flex-grow">
+            {/* 3. Media Evidence */}
+            <div className="glass-card border-amber-500/25 p-5 space-y-4 bg-amber-500/5 group hover:border-amber-500/40 transition-colors flex-grow">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <p className="text-sm font-semibold text-neon-orange/90">Media Evidence</p>
-                  <p className="text-[9px] text-white/30 uppercase tracking-wider mt-0.5">
+                  <p className="text-sm font-bold text-white">Media Evidence</p>
+                  <p className="text-[9px] text-white/40 uppercase tracking-wider mt-0.5">
                     PNG, JPG, WEBP • Max 4MB • Up to 4 images
                   </p>
                 </div>
-                <div className="text-[10px] text-white/40 flex gap-2">
-                  <span>📸 Front</span>
-                  <span>📸 Back</span>
-                  <span>📸 Top</span>
-                  <span>📸 Detail</span>
+                <div className="text-[10px] text-amber-400 font-mono flex gap-2">
+                  <span>📸 AI Analysis</span>
+                  <span>📝 OCR Scan</span>
                 </div>
               </div>
               
@@ -318,10 +320,10 @@ export default function ReportItemPage() {
                         
                         {idx === 0 && isScanning && (
                           <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center z-10">
-                            {}
-                            <div className="absolute left-0 w-full h-0.5 bg-neon-cyan shadow-[0_0_8px_#00f5ff] animate-scan-laser" />
-                            {}
-                            <span className="text-[10px] font-bold text-neon-cyan font-mono">{scanProgress}%</span>
+                            {/* Scanning laser effect */}
+                            <div className="absolute left-0 w-full h-0.5 bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-scan-laser" />
+                            {/* Scanning text overlay */}
+                            <span className="text-[10px] font-bold text-amber-400 font-mono">{scanProgress}%</span>
                           </div>
                         )}
 
@@ -360,26 +362,26 @@ export default function ReportItemPage() {
                   className={`p-4 rounded-xl border flex flex-col gap-3 relative overflow-hidden ${
                     aiClassification.category === 'Unable to detect'
                       ? 'border-red-500/20 bg-red-500/5'
-                      : 'border-neon-cyan/20 bg-neon-cyan/5'
+                      : 'border-amber-500/20 bg-amber-500/5'
                   }`}
                 >
                   <div className={`absolute top-0 right-0 w-24 h-24 blur-[30px] pointer-events-none rounded-full ${
                     aiClassification.category === 'Unable to detect'
                       ? 'bg-red-500/10'
-                      : 'bg-neon-cyan/10'
+                      : 'bg-amber-500/10'
                   }`} />
                   
                   <div className="flex items-center justify-between">
                     <span className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-                      aiClassification.category === 'Unable to detect' ? 'text-red-400' : 'text-neon-cyan'
+                      aiClassification.category === 'Unable to detect' ? 'text-red-400' : 'text-amber-400'
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${
-                        aiClassification.category === 'Unable to detect' ? 'bg-red-500' : 'bg-neon-cyan animate-ping'
+                        aiClassification.category === 'Unable to detect' ? 'bg-red-500' : 'bg-amber-400 animate-ping'
                       }`} />
                       YOLO/CNN Feature Extraction
                     </span>
                     {aiClassification.category !== 'Unable to detect' ? (
-                      <span className="text-[10px] font-bold font-mono text-neon-green bg-neon-green/10 border border-neon-green/30 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-bold font-mono text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
                         Confidence: {aiClassification.confidence}%
                       </span>
                     ) : (
@@ -420,16 +422,19 @@ export default function ReportItemPage() {
               )}
             </div>
 
-            {}
-            <div className="glass-card border-neon-green/30 p-5 space-y-4 bg-neon-green/5">
+            {/* 4. Location Picker */}
+            <div className="glass-card border-white/10 p-5 space-y-4 bg-white/5">
               <div className="flex justify-between items-center">
-                 <p className="text-sm font-semibold text-neon-green/90">Location</p>
+                 <div className="flex items-center gap-2">
+                   <p className="text-sm font-bold text-white">Campus Location</p>
+                   <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 uppercase">Pin</span>
+                 </div>
                  <button 
                   type="button"
                   onClick={() => setShowEnlargedMap(true)}
-                  className="text-[10px] text-neon-green/60 hover:text-neon-green border border-neon-green/30 px-2 py-0.5 rounded bg-neon-green/5 transition-colors"
+                  className="text-xs text-amber-400 font-semibold border border-amber-500/30 px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
                  >
-                   Enlarge Map
+                   Enlarge Map ↗
                  </button>
               </div>
               <div className="rounded-lg overflow-hidden border border-white/10">
@@ -442,17 +447,17 @@ export default function ReportItemPage() {
           </div>
         </div>
 
-        {}
+        {/* Submit Action */}
         <div className="flex justify-end pt-2">
           <motion.button
             type="submit"
             id="submit-report-btn"
             disabled={isLoading}
-            whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(0, 245, 255, 0.4)' }}
+            whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
             whileTap={{ scale: 0.97 }}
-            className="px-8 py-3 rounded-xl border border-neon-cyan/50 bg-neon-cyan/10 text-white font-bold
-              hover:bg-neon-cyan/20 hover:border-neon-cyan transition-all
-              disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(0,245,255,0.1)] relative overflow-hidden flex items-center gap-2"
+            className="px-8 py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold
+              hover:bg-amber-400 transition-all
+              disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(245,158,11,0.35)] relative overflow-hidden flex items-center gap-2"
           >
             {isLoading ? (
               <>
@@ -474,22 +479,22 @@ export default function ReportItemPage() {
         </div>
       </motion.form>
 
-      {}
+      {/* Info Card */}
       <motion.div
         variants={staggerItem}
-        className="glass-card border-neon-cyan/30 p-4 text-xs text-white/60 leading-relaxed bg-neon-cyan/5 flex gap-3 items-start relative overflow-hidden"
+        className="glass-card border-amber-500/30 p-4 text-xs text-white/70 leading-relaxed bg-amber-500/5 flex gap-3 items-start relative overflow-hidden"
       >
-        <div className="p-2 bg-neon-cyan/10 rounded-full shrink-0">
-          <svg className="w-4 h-4 text-neon-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="p-2 bg-amber-500/10 rounded-full shrink-0">
+          <svg className="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
         <div className="z-10">
-          <span className="text-neon-cyan font-bold block mb-1">How it works:</span> 
+          <span className="text-amber-400 font-bold block mb-1">How it works:</span> 
           After submitting, our AI analyzes your report and automatically searches for possible matches. If a match is found, you'll receive a notification with a similarity score. All reports are registered on blockchain for verification.
         </div>
         {/* Subtle background glow */}
-        <div className="absolute top-1/2 -right-10 w-32 h-32 bg-neon-cyan/20 blur-[50px] pointer-events-none rounded-full" />
+        <div className="absolute top-1/2 -right-10 w-32 h-32 bg-amber-500/20 blur-[50px] pointer-events-none rounded-full" />
       </motion.div>
 
       {/* Enlarged Map Overlay */}
@@ -504,11 +509,11 @@ export default function ReportItemPage() {
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              className="glass-panel border-neon-green/40 bg-dark-panel w-full max-w-4xl max-h-[80vh] flex flex-col relative"
+              className="glass-panel border-amber-500/40 bg-dark-panel w-full max-w-4xl max-h-[80vh] flex flex-col relative"
             >
               <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
                 <h3 className="text-white font-bold flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                   Select Precise Location
                 </h3>
                 <button
@@ -533,7 +538,7 @@ export default function ReportItemPage() {
                 <button
                   type="button"
                   onClick={() => setShowEnlargedMap(false)}
-                  className="px-6 py-2 rounded-lg bg-neon-green/20 border border-neon-green/40 text-neon-green font-bold hover:bg-neon-green/30 transition-all"
+                  className="px-6 py-2 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold hover:bg-amber-500/30 transition-all"
                 >
                   Done
                 </button>
