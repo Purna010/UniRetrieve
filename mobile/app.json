@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "UniRetrieve",
+    "slug": "uniretrieve-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#030712"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "UniRetrieve requires camera access to capture photos of lost or found campus items.",
+        "NSPhotoLibraryUsageDescription": "UniRetrieve needs gallery access to upload photos of campus belongings.",
+        "NSLocationWhenInUseUsageDescription": "UniRetrieve uses your campus coordinates to pinpoint where items were lost or found."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#030712"
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow UniRetrieve to capture item photos."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow UniRetrieve to select item images from your library."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow UniRetrieve to use your campus location."
+        }
+      ]
+    ]
+  }
+}
