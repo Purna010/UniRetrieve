@@ -289,6 +289,73 @@ export function AppProvider({ children }) {
     }
   }, [fetchAllData, addToast]);
 
+  const ssoLogin = useCallback(async (ssoCode = 'anush@univ.edu') => {
+    try {
+      const res = await fetch(`${API_URL}/auth/sso/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ssoCode: btoa(ssoCode) })
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'SSO Login failed');
+      }
+      const data = await res.json();
+      localStorage.setItem('uniretrieve_user', JSON.stringify(data.user));
+      localStorage.setItem('uniretrieve_token', data.token);
+      setCurrentUser(data.user);
+      setToken(data.token);
+      addToast({
+        type: 'success',
+        title: 'University SSO Authenticated 🎓',
+        message: `Welcome ${data.user.name} (${data.user.department || 'Enrolled Student'})!`
+      });
+      fetchAllData();
+      return true;
+    } catch (error) {
+      console.error('SSO Login error:', error);
+      addToast({ type: 'error', title: 'SSO Login Failed', message: error.message });
+      return false;
+    }
+  }, [addToast, fetchAllData]);
+
+  const sendZkClaimRequest = useCallback(async (matchId, secret, studentId) => {
+    try {
+      setIsLoading(true);
+      const zkRes = await fetch(`${API_URL}/zk/generate-proof`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret, studentId, matchId })
+      });
+      const zkProofPayload = await zkRes.json();
+      if (!zkRes.ok) throw new Error(zkProofPayload.error || 'Failed to generate zk proof');
+
+      const res = await fetch(`${API_URL}/zk/verify-claim`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ matchId, zkProofPayload })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'zk verification rejected');
+
+      addToast({
+        type: 'success',
+        title: 'Zero-Knowledge Claim Verified 🛡️',
+        message: 'Your ownership proof was verified on-chain via zk-SNARK without exposing your private secret.'
+      });
+      fetchAllData();
+      return true;
+    } catch (err) {
+      addToast({ type: 'error', title: 'zk Claim Error', message: err.message });
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token, addToast, fetchAllData]);
+
   const logout = useCallback(() => {
     localStorage.removeItem('uniretrieve_user');
     localStorage.removeItem('uniretrieve_token');
@@ -1135,6 +1202,8 @@ export function AppProvider({ children }) {
     overrideLock,
     triggerSupportAI,
     login,
+    ssoLogin,
+    sendZkClaimRequest,
     register,
     logout,
     demoUsers,

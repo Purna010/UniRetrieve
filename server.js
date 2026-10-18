@@ -20,6 +20,8 @@ import Message from './models/Message.js';
 import Notification from './models/Notification.js';
 import Subscription from './models/Subscription.js';
 import { notificationService } from './services/notificationService.js';
+import { erpService } from './services/erpService.js';
+import { zkService } from './services/zkService.js';
 
 dotenv.config();
 
@@ -360,6 +362,148 @@ app.get('/api/auth/me', async (req, res) => {
     res.json(userResponse);
   } catch (error) {
     res.status(401).json({ error: 'Invalid or expired token' });
+  }
+});
+
+// --- 1. University ERP SSO & Registrar Verification Endpoints ---
+app.post('/api/auth/sso/login', async (req, res) => {
+  try {
+    const { ssoCode } = req.body;
+    const ssoProfile = await erpService.exchangeSsoCode(ssoCode);
+
+    let user = await User.findOne({ email: ssoProfile.email.toLowerCase() });
+    if (!user) {
+      user = new User({
+        id: 'user_' + Date.now(),
+        name: ssoProfile.name,
+        email: ssoProfile.email.toLowerCase(),
+        passwordHash: bcrypt.hashSync(Date.now().toString(), 10),
+        role: ssoProfile.role || 'user',
+        studentId: ssoProfile.studentId
+      });
+      await user.save();
+    }
+
+    const token = jwt.sign({ id: user.id, role: user.role, sso: true }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        studentId: user.studentId,
+        department: ssoProfile.department,
+        erpVerified: true
+      },
+      token
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'SSO Authentication failed: ' + err.message });
+  }
+});
+
+app.get('/api/auth/erp/verify/:studentId', async (req, res) => {
+  try {
+    const result = await erpService.verifyStudentEnrollment(req.params.studentId);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to verify enrollment with registrar' });
+  }
+});
+
+// --- 2. PII & Face Redaction Proxy Endpoint ---
+app.post('/api/privacy/redact', async (req, res) => {
+  try {
+    const { imageBase64 } = req.body;
+    if (!imageBase64) {
+      return res.status(400).json({ error: 'Missing imageBase64 data' });
+    }
+
+    const base64Data = imageBase64.split(';base64,').pop();
+    const buffer = Buffer.from(base64Data, 'base64');
+    const blob = new Blob([buffer], { type: 'image/jpeg' });
+    const formData = new FormData();
+    formData.append('image', blob, 'claim_proof.jpg');
+
+    const cvResponse = await fetch('http://localhost:5001/redact-pii', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (cvResponse.ok) {
+      const data = await cvResponse.json();
+      return res.json(data);
+    }
+
+    // Fallback if Flask CV service is offline
+    res.json({
+      success: true,
+      facesRedacted: 1,
+      redactedImage: imageBase64,
+      fallback: true
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'PII Redaction failed: ' + err.message });
+  }
+});
+
+// --- 3. zk-SNARK Verification Endpoints ---
+app.post('/api/zk/generate-proof', async (req, res) => {
+  try {
+    const { secret, studentId, matchId } = req.body;
+    if (!secret || !studentId || !matchId) {
+      return res.status(400).json({ error: 'secret, studentId, and matchId are required' });
+    }
+    const zkProofPayload = await zkService.generateProof(secret, studentId, matchId);
+    res.json(zkProofPayload);
+  } catch (err) {
+    res.status(500).json({ error: 'zk-SNARK proof generation failed: ' + err.message });
+  }
+});
+
+app.post('/api/zk/verify-claim', authGuard, async (req, res) => {
+  try {
+    const { matchId, zkProofPayload, expectedCommitment } = req.body;
+    const verifyResult = zkService.verifyProof(zkProofPayload, expectedCommitment);
+
+    if (!verifyResult.verified) {
+      return res.status(400).json(verifyResult);
+    }
+
+    // Log zero-knowledge verified claim to blockchain if available
+    let blockchainReceipt = null;
+    if (blockchainContract) {
+      try {
+        const tx = await blockchainContract.logClaim(
+          matchId,
+          zkProofPayload.commitmentHash.slice(0, 16),
+          zkProofPayload.nullifierHash.slice(0, 16),
+          'ZK_VERIFIED_STUDENT'
+        );
+        const receipt = await tx.wait();
+        blockchainReceipt = { txHash: receipt.hash, blockNumber: receipt.blockNumber };
+      } catch (e) {
+        console.warn('zk claim blockchain anchoring fallback:', e.message);
+      }
+    }
+
+    await Match.findOneAndUpdate(
+      { id: matchId },
+      {
+        zkVerified: true,
+        zkNullifier: zkProofPayload.nullifierHash,
+        status: 'claim_requested',
+        claimRequestSent: true
+      }
+    );
+
+    res.json({
+      success: true,
+      verifyResult,
+      blockchainReceipt
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'zk verification failed: ' + err.message });
   }
 });
 

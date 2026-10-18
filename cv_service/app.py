@@ -1,9 +1,18 @@
 import os
 import cv2
 import numpy as np
+import base64
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+
+face_cascade = None
+try:
+    cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    face_cascade = cv2.CascadeClassifier(cascade_path)
+    print("SUCCESS: Loaded OpenCV Haar Cascade Face Detector for PII Redaction.")
+except Exception as e:
+    print(f"WARNING: Face cascade could not be loaded: {e}")
 
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "yolov5n.onnx")
@@ -278,6 +287,47 @@ def health():
         "service": "yolo_classifier",
         "modelLoaded": net is not None,
         "classesCount": len(classes)
+    })
+
+@app.route('/redact-pii', methods=['POST'])
+def redact_pii():
+    if 'image' not in request.files:
+        return jsonify({"error": "No image file provided"}), 400
+    file = request.files['image']
+    try:
+        file_bytes = np.frombuffer(file.read(), np.uint8)
+        image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+    except Exception as e:
+        return jsonify({"error": f"Failed to decode image: {e}"}), 400
+    if image is None:
+        return jsonify({"error": "Invalid image"}), 400
+
+    h, w = image.shape[:2]
+    redacted_image = image.copy()
+    faces_detected = 0
+
+    if face_cascade is not None:
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(30, 30))
+        for (x, y, fw, fh) in faces:
+            faces_detected += 1
+            face_roi = redacted_image[y:y+fh, x:x+fw]
+            ksize = max(51, (fw // 3) * 2 + 1)
+            blurred = cv2.GaussianBlur(face_roi, (ksize, ksize), 30)
+            redacted_image[y:y+fh, x:x+fw] = blurred
+            cv2.rectangle(redacted_image, (x, y), (x+fw, y+fh), (0, 245, 255), 2)
+            cv2.putText(redacted_image, "[PII PROTECTED]", (x, max(15, y - 6)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 245, 255), 1, cv2.LINE_AA)
+
+    _, buffer = cv2.imencode('.jpg', redacted_image, [int(cv2.IMWRITE_JPEG_QUALITY), 85])
+    b64_str = base64.b64encode(buffer).decode('utf-8')
+    data_uri = f"data:image/jpeg;base64,{b64_str}"
+
+    return jsonify({
+        "success": True,
+        "facesRedacted": faces_detected,
+        "redactedImage": data_uri,
+        "dimensions": {"width": w, "height": h}
     })
 
 if __name__ == '__main__':

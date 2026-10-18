@@ -4,7 +4,7 @@ import { useApp } from '../context/AppContext';
 import { fadeInDown, fadeInUp } from '../animations/variants';
 
 export default function AuthPage() {
-  const { login, register, demoUsers } = useApp();
+  const { login, ssoLogin, register, demoUsers } = useApp();
   const [mode, setMode] = useState('login');
 
   const [email, setEmail] = useState('');
@@ -198,6 +198,22 @@ export default function AuthPage() {
                   className="w-full mt-2 bg-gradient-to-r from-neon-cyan/80 to-neon-purple/80 hover:from-neon-cyan hover:to-neon-purple text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_15px_rgba(0,240,255,0.3)] hover:shadow-[0_0_25px_rgba(0,240,255,0.5)]"
                 >
                   {mode === 'login' ? 'Sign In' : 'Create Account'}
+                </button>
+
+                <div className="relative my-4 flex items-center justify-center">
+                  <div className="border-t border-white/10 w-full" />
+                  <span className="bg-[#0b1120] px-3 text-[10px] font-mono uppercase tracking-wider text-white/40 absolute">
+                    or institutional identity
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => ssoLogin('anush@univ.edu')}
+                  className="w-full flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-lg bg-white/5 border border-amber-500/30 hover:border-amber-500/60 hover:bg-amber-500/10 text-white text-xs font-bold transition-all group shadow-[0_0_12px_rgba(245,158,11,0.15)]"
+                >
+                  <span className="text-amber-400 text-sm">🎓</span>
+                  <span className="group-hover:text-amber-300">Sign in with University ERP (SAML / OAuth)</span>
                 </button>
               </motion.form>
             )}

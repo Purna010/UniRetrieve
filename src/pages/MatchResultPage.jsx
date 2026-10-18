@@ -5,6 +5,7 @@ import { useApp } from '../context/AppContext';
 import { fadeInUp, scaleIn } from '../animations/variants';
 import { getScoreColor, formatDateTime } from '../utils/helpers';
 import NeonButton from '../components/ui/NeonButton';
+import { privacyRedactor } from '../utils/privacyRedactor';
 
 function CircleScore({ score }) {
   const color = getScoreColor(score);
@@ -81,7 +82,7 @@ function ItemImageBox({ label, item, color }) {
 
 export default function MatchResultPage() {
   const { matchId } = useParams();
-  const { matches, items, sendClaimRequest, isLoading, currentUser } = useApp();
+  const { matches, items, sendClaimRequest, sendZkClaimRequest, isLoading, currentUser } = useApp();
   const navigate = useNavigate();
 
   const match = matches.find(m => m.id === matchId);
@@ -97,6 +98,9 @@ export default function MatchResultPage() {
   const [idScanProgress, setIdScanProgress] = useState(0);
   const [uniqueMarks, setUniqueMarks] = useState('');
   const [contentsDesc, setContentsDesc] = useState('');
+  const [useZkProof, setUseZkProof] = useState(true);
+  const [autoRedactPii, setAutoRedactPii] = useState(true);
+  const [isRedacted, setIsRedacted] = useState(false);
   const attempts = match?.claimAttempts || 0;
 
   const cardFileRef = useRef(null);
@@ -113,8 +117,23 @@ export default function MatchResultPage() {
   const handleCardUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setStudentCardPreview(URL.createObjectURL(file));
-    
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const rawBase64 = reader.result;
+      if (autoRedactPii) {
+        try {
+          const redacted = await privacyRedactor.redactImageClientSide(rawBase64);
+          setStudentCardPreview(redacted);
+          setIsRedacted(true);
+        } catch (err) {
+          setStudentCardPreview(rawBase64);
+        }
+      } else {
+        setStudentCardPreview(rawBase64);
+      }
+    };
+    reader.readAsDataURL(file);
     
     setIdScanning(true);
     setIdScanProgress(0);
@@ -151,12 +170,19 @@ export default function MatchResultPage() {
       return;
     }
 
-    const success = await sendClaimRequest(matchId, {
-      studentId,
-      uniqueMarks,
-      contentsDesc,
-      proofImage: studentCardPreview
-    });
+    let success;
+    if (useZkProof) {
+      // Zero-Knowledge Proof: Proves knowledge of private item features without plaintext disclosure
+      const privateSecret = `${uniqueMarks.trim()} | ${contentsDesc.trim()}`;
+      success = await sendZkClaimRequest(matchId, privateSecret, studentId);
+    } else {
+      success = await sendClaimRequest(matchId, {
+        studentId,
+        uniqueMarks,
+        contentsDesc,
+        proofImage: studentCardPreview
+      });
+    }
 
     if (success) {
       setClaimed(true);
@@ -410,6 +436,23 @@ export default function MatchResultPage() {
                       onChange={handleCardUpload}
                       className="hidden"
                     />
+
+                    <div className="flex items-center justify-between pt-1">
+                      <label className="flex items-center gap-2 cursor-pointer text-[11px] text-white/70">
+                        <input
+                          type="checkbox"
+                          checked={autoRedactPii}
+                          onChange={(e) => setAutoRedactPii(e.target.checked)}
+                          className="rounded border-white/20 bg-white/5 text-neon-cyan focus:ring-0"
+                        />
+                        <span>🛡️ Auto-Redact Face & Sensitive PII</span>
+                      </label>
+                      {isRedacted && (
+                        <span className="text-[10px] font-bold text-neon-green font-mono bg-neon-green/10 border border-neon-green/30 px-2 py-0.5 rounded">
+                          PII Shield Active
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -441,6 +484,21 @@ export default function MatchResultPage() {
                       placeholder="e.g. Contains CS textbooks, a black charger, and a red keyholder inside the front zipper..."
                       className="glass-input resize-none h-20 py-2 text-xs"
                     />
+                  </div>
+
+                  <div className="p-3 rounded-lg border border-neon-cyan/30 bg-neon-cyan/5 text-xs text-white/80 space-y-1.5">
+                    <label className="flex items-center gap-2 cursor-pointer font-bold text-neon-cyan">
+                      <input
+                        type="checkbox"
+                        checked={useZkProof}
+                        onChange={(e) => setUseZkProof(e.target.checked)}
+                        className="rounded border-neon-cyan/40 bg-black/40 text-neon-cyan focus:ring-0"
+                      />
+                      <span>🔒 Zero-Knowledge Proof (zk-SNARK) Verification Mode</span>
+                    </label>
+                    <p className="text-[11px] text-white/60 leading-relaxed pl-5">
+                      Mathematically proves ownership on-chain using Groth16 cryptographic commitments without saving raw secret text on the public Ethereum ledger.
+                    </p>
                   </div>
 
                   {}
