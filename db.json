@@ -956,30 +956,26 @@
       "name": "Campus Security",
       "email": "security@univ.edu",
       "role": "admin",
-      "studentId": "N/A",
-      "passwordHash": "$2b$10$ieB6eU.AbQkeKAFLyDnqpeYChERHfRbRsFZ0ZjgyQH4sRTdvsHNPq"
+      "studentId": "N/A"
     },
     {
       "id": "user_1",
       "name": "Anush Kumar",
       "email": "anush@univ.edu",
       "role": "user",
-      "studentId": "STUDENT123",
-      "passwordHash": "$2b$10$zafX4ntBRBLUMAbXN3rYm.b694ZiVOCXNPLvDzBADSgAatLn7Ewei"
+      "studentId": "STUDENT123"
     },
     {
       "id": "user_2",
       "name": "Swaroop Hegde",
       "email": "swaroop@univ.edu",
       "role": "user",
-      "studentId": "STUDENT456",
-      "passwordHash": "$2b$10$Rc7xsasNvc09HwLZ7EGFvOcEmRInSc3E6NN1w7H9uUrRd/g8FSyR2"
+      "studentId": "STUDENT456"
     },
     {
       "id": "user_1787021217559",
       "name": "Test Student",
       "email": "student_test_1787021217082@univ.edu",
-      "passwordHash": "$2b$10$SA/7WDP8WVRgHZ5HcwK/W.CivSFUvqjemjAOhzMp3FcG2RPoR7A2.",
       "role": "user",
       "studentId": "STUDENT999"
     },
@@ -987,7 +983,6 @@
       "id": "user_1787021230328",
       "name": "Test Student",
       "email": "student_test_1787021230305@univ.edu",
-      "passwordHash": "$2b$10$f/t7G6tDIVCFh4jFhKVqcuUcaoKyED/idt9EH9f7WECUeHaYUnWU.",
       "role": "user",
       "studentId": "STUDENT999"
     }

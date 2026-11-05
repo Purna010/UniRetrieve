@@ -237,6 +237,35 @@ export function AppProvider({ children }) {
     }, 4000);
   }, []);
 
+  const demoLogin = useCallback(async (role) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/demo-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Demo login failed');
+      localStorage.setItem('uniretrieve_token', data.token);
+      localStorage.setItem('uniretrieve_user', JSON.stringify(data.user));
+      setToken(data.token);
+      setCurrentUser(data.user);
+      addToast({
+        title: 'Logged in successfully',
+        message: `Welcome back, ${data.user.name}!`,
+        type: 'success'
+      });
+      return { success: true };
+    } catch (err) {
+      addToast({
+        title: 'Authentication Failed',
+        message: err.message,
+        type: 'error'
+      });
+      return { success: false, error: err.message };
+    }
+  }, [addToast]);
+
   const login = useCallback(async (email, password) => {
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -1207,6 +1236,7 @@ export function AppProvider({ children }) {
     register,
     logout,
     demoUsers,
+    demoLogin,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

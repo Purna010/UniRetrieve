@@ -4,7 +4,7 @@ import { useApp } from '../context/AppContext';
 import { fadeInDown, fadeInUp } from '../animations/variants';
 
 export default function AuthPage() {
-  const { login, ssoLogin, register, demoUsers } = useApp();
+  const { login, ssoLogin, register, demoUsers, demoLogin } = useApp();
   const [mode, setMode] = useState('login');
 
   const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ export default function AuthPage() {
   const handleDemoLogin = async (role) => {
     const user = demoUsers.find(u => u.role === role);
     if (user) {
-      await login(user.email, 'password123');
+      if (demoLogin) { await demoLogin(role); } else { await login(user.email, ''); }
     }
   };
 

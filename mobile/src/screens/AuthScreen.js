@@ -48,10 +48,10 @@ export default function AuthScreen() {
   const handleDemoFill = (role) => {
     if (role === 'student') {
       setEmail('anush@univ.edu');
-      setPassword('password123');
+      setPassword('');
     } else {
       setEmail('security@univ.edu');
-      setPassword('password123');
+      setPassword('');
     }
   };
 

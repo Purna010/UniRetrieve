@@ -39,7 +39,7 @@ try {
     ];
     const seeded = demoUsers.map(u => ({
       ...u,
-      passwordHash: bcrypt.hashSync('password123', 10)
+      passwordHash: bcrypt.hashSync(process.env.DEFAULT_PROFILE_PASSWORD || crypto.randomUUID(), 10)
     }));
     await User.insertMany(seeded);
     console.log('🌱 Seeded default users into MongoDB.');
@@ -309,6 +309,28 @@ app.post('/api/auth/signup', async (req, res) => {
     res.status(201).json({ user: userResponse, token });
   } catch (error) {
     res.status(500).json({ error: 'Failed to register user' });
+  }
+});
+
+app.post('/api/auth/demo-login', async (req, res) => {
+  try {
+    const { role } = req.body;
+    const targetEmail = role === 'admin' ? 'swaroop@univ.edu' : (role === 'security' ? 'security@univ.edu' : 'anush@univ.edu');
+    let user = await User.findOne({ email: targetEmail });
+    if (!user) {
+      return res.status(404).json({ error: 'Demo profile not found' });
+    }
+    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
+    const userResponse = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      studentId: user.studentId
+    };
+    res.json({ user: userResponse, token });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed demo login' });
   }
 });
 
